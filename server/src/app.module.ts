@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGODB_URI || 'mongodb://localhost:27017'),
+    MongooseModule.forRoot('mongodb+srv://quantc:31012004@nt548-devops.68ujgah.mongodb.net/NT548-DevOps-DB?retryWrites=true&w=majority'),
     StudentsModule,
   ],
 })
