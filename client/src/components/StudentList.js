@@ -13,7 +13,7 @@ const StudentList = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/students');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/students`);
       setStudents(response.data);
     } catch (error) {
       console.error('Error fetching students:', error);
@@ -24,7 +24,7 @@ const StudentList = () => {
   const deleteStudent = async (id) => {
     try {
       console.log('Deleting student with ID:', id);
-      await axios.delete(`http://localhost:5000/students/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/students/${id}`);
       fetchStudents();
       toast.success(`Deleted Student ${id}!`);
     } catch (error) {

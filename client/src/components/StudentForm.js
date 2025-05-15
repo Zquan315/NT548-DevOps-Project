@@ -21,12 +21,12 @@ const StudentForm = ({ student, onSubmit }) => {
     e.preventDefault();
     try {
       if (student) {
-        await axios.patch(`http://localhost:5000/students/${formData.id}`, {
+        await axios.patch(`${process.env.REACT_APP_API_URL}/students/${formData.id}`, {
           name: formData.name,
           major: formData.major,
         });
       } else {
-        await axios.post('http://localhost:5000/students', formData);
+        await axios.post(`${process.env.REACT_APP_API_URL}/students`, formData);
       }
       setFormData({ id: '', name: '', major: '' });
       onSubmit();

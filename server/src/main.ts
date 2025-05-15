@@ -11,6 +11,6 @@ async function bootstrap() {
   mongoose.connection.on('error', (err) => {
     console.error('MongoDB connection error:', err);
   });
-  await app.listen(process.env.PORT ?? 5000);
+  await app.listen(5000);
 }
 bootstrap();

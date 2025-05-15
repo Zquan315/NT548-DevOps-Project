@@ -2,13 +2,13 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/student-management-app
+    destination: /home/ubuntu/student-management-app
 hooks:
   AfterInstall:
     - location: scripts/install_dependencies.sh
-      timeout: 300
-      runas: ec2-user
+      timeout: 600
+      runas: ubuntu
   ApplicationStart:
-    - location: scripts/start_server.sh
-      timeout: 300
-      runas: ec2-user
+    - location: scripts/start_all.sh
+      timeout: 600
+      runas: ubuntu
