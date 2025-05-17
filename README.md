@@ -40,3 +40,4 @@ Hoặc có thể chạy file start_app.sh
 ``` bash
   bash scripts/install_dependencies.sh
 ```
+## Hướng dẫn thiết lập AWS CICD pipeline
