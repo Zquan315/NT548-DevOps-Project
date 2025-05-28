@@ -41,3 +41,5 @@ Hoặc có thể chạy file start_app.sh
   bash scripts/install_dependencies.sh
 ```
 ## Hướng dẫn thiết lập AWS CICD pipeline
+
+- Các bước chạy chi tiết nằm trong file Step-by-step-AWS-CICD-pipeline.docx. [Tại đây](https://github.com/Zquan315/NT548-DevOps-Project/blob/main/Step-by-step-AWS-CICD-pipeline.docx)
