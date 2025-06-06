@@ -19,16 +19,40 @@ const StudentForm = ({ student, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Kiểm tra nếu major trống khi thêm sinh viên mới
+    if (!formData.major) {
+      alert('Chuyên ngành là bắt buộc!');
+      return;
+    }
+
     try {
       if (student) {
+        // Cập nhật sinh viên đã tồn tại
         await axios.patch(`${process.env.REACT_APP_API_URL}/students/${formData.id}`, {
           name: formData.name,
           major: formData.major,
         });
       } else {
-        await axios.post(`${process.env.REACT_APP_API_URL}/students`, formData);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/students`);
+        const students = response.data;
+        const isDuplicate = students.some(existingStudent => existingStudent.id === formData.id);
+
+        if (isDuplicate) {
+          alert('ID đã tồn tại. Vui lòng chọn ID khác!');
+          return;
+        } else {
+          // Gửi dữ liệu tạo mới sinh viên với major và GPA mặc định là 0
+          await axios.post(`${process.env.REACT_APP_API_URL}/students`, {
+            id: formData.id,
+            name: formData.name,
+            major: formData.major, // Đảm bảo major không bị bỏ trống
+            GPA: 0, // GPA mặc định khi tạo mới
+          });
+        }
       }
-      setFormData({ id: '', name: '', major: '' });
+
+      setFormData({ id: '', name: '', major: '' }); // Reset form sau khi thêm hoặc cập nhật
       onSubmit();
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -56,15 +80,20 @@ const StudentForm = ({ student, onSubmit }) => {
         required
         style={{ margin: '5px', padding: '5px' }}
       />
-      <input
-        type="text"
+      <select
         name="major"
         value={formData.major}
         onChange={handleChange}
-        placeholder="Major"
         required
-        style={{ margin: '5px', padding: '5px' }}
-      />
+        style={{ margin: '5px', padding: '5px'}}
+      >
+        <option value="">Select Major</option>
+        <option value="MMTT">MMTT</option>
+        <option value="ATTT">ATTT</option>
+        <option value="ATTN">ATTN</option>
+        <option value="KHMT">KHMT</option>
+        <option value="KHTN">KHTN</option>
+      </select> 
       <button type="submit" style={{ margin: '5px', padding: '5px 10px' }}>
         {student ? 'Update' : 'Add'} student
       </button>
