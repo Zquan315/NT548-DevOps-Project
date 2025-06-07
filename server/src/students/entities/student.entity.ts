@@ -12,11 +12,11 @@ export class Student extends Document {
   @Prop({ required: true })
   major: string;
 
-//   @Prop({ required: true })
-//   GPA: number;
+  @Prop({ required: false})
+  GPA: number;
 
-//   @Prop({ required: true })
-//   subjects: { name: string, score: number }[]; 
+  @Prop({ required: false})
+  subjects: { name: string, score: number }[]; 
 }
 
 export const StudentSchema = SchemaFactory.createForClass(Student);

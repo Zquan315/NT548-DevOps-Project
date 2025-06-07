@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import StudentForm from './StudentForm';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'; // Thay useHistory bằng useNavigate
+import { Link } from 'react-router-dom';
+import StudentForm from './StudentForm';
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [editingStudent, setEditingStudent] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedMajor, setSelectedMajor] = useState(''); // State cho Major
+  const [selectedMajor, setSelectedMajor] = useState('');
+  const navigate = useNavigate(); // Dùng useNavigate để điều hướng trang
 
   useEffect(() => {
     fetchStudents();
@@ -26,7 +29,6 @@ const StudentList = () => {
 
   const deleteStudent = async (id) => {
     try {
-      console.log('Deleting student with ID:', id);
       await axios.delete(`${process.env.REACT_APP_API_URL}/students/${id}`);
       fetchStudents();
       toast.success(`Deleted Student ${id}!`);
@@ -46,33 +48,32 @@ const StudentList = () => {
     toast.success(editingStudent ? 'Updated student successfully!' : 'Added a student successfully!');
   };
 
-  // Lọc sinh viên theo ID và Major
   const filteredStudents = students.filter(student => {
-    const studentId = student.id ? student.id.toString() : ''; // Đảm bảo id là chuỗi
-    const idMatches = studentId.startsWith(searchTerm); // Kiểm tra nếu MSSV bắt đầu với searchTerm
-    const majorMatches = selectedMajor ? student.major === selectedMajor : true; // Kiểm tra nếu Major khớp
+    const studentId = student.id ? student.id.toString() : '';
+    const idMatches = studentId.startsWith(searchTerm);
+    const majorMatches = selectedMajor ? student.major === selectedMajor : true;
     return idMatches && majorMatches;
   });
+
+  // Chuyển hướng đến trang nhập điểm
+  const handlePointClick = (studentId) => {
+    navigate(`/students/${studentId}/points`); // Sử dụng navigate để chuyển hướng
+  };
 
   return (
     <div>
       <h1>Student Management</h1>
       <StudentForm student={editingStudent} onSubmit={handleFormSubmit} />
-      
-      {/* Tìm kiếm theo ID */}
       <input
         type="text"
         placeholder="Search by ID (starts with)"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật searchTerm khi người dùng nhập
+        onChange={(e) => setSearchTerm(e.target.value)}
         style={{ margin: '5px', padding: '5px' }}
       />
-      <button onClick={() => {}} style={{ marginBottom: '10px' }}>Search</button>
-
-      {/* Tìm kiếm theo Major */}
       <select
         value={selectedMajor}
-        onChange={(e) => setSelectedMajor(e.target.value)} // Cập nhật selectedMajor khi người dùng chọn
+        onChange={(e) => setSelectedMajor(e.target.value)}
         style={{ margin: '5px', padding: '5px' }}
       >
         <option value="">Select Major</option>
@@ -89,6 +90,7 @@ const StudentList = () => {
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Name</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Major</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>GPA</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Action</th>
           </tr>
         </thead>
@@ -98,6 +100,7 @@ const StudentList = () => {
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{student.id}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{student.name}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{student.major}</td>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{student.GPA}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                 <button
                   onClick={() => editStudent(student)}
@@ -126,6 +129,21 @@ const StudentList = () => {
                   }}
                 >
                   Delete
+                </button>
+
+                {/* Nút "Point" để chuyển đến trang nhập điểm */}
+                <button
+                  onClick={() => handlePointClick(student.id)}
+                  style={{
+                    padding: '5px 10px',
+                    backgroundColor: '#007bff', // Màu xanh cho "Point"
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Point
                 </button>
               </td>
             </tr>

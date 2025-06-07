@@ -42,12 +42,11 @@ const StudentForm = ({ student, onSubmit }) => {
           alert('ID đã tồn tại. Vui lòng chọn ID khác!');
           return;
         } else {
-          // Gửi dữ liệu tạo mới sinh viên với major và GPA mặc định là 0
           await axios.post(`${process.env.REACT_APP_API_URL}/students`, {
             id: formData.id,
             name: formData.name,
-            major: formData.major, // Đảm bảo major không bị bỏ trống
-            GPA: 0, // GPA mặc định khi tạo mới
+            major: formData.major, 
+            GPA: 0, 
           });
         }
       }

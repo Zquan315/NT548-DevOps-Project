@@ -31,4 +31,23 @@ export class StudentsController {
   remove(@Param('id') id: string) {
     return this.studentsService.remove(id);
   }
+
+  @Patch(':id/subjects')
+  addSubject(@Param('id') id: string, @Body() subjectData: { name: string; score: number }) {
+    return this.studentsService.addSubject(id, subjectData);
+  }
+
+  @Patch(':id/subjects/:subjectName')
+  updateSubjectScore(
+    @Param('id') id: string,
+    @Param('subjectName') subjectName: string,
+    @Body() newScore: { score: number }
+  ) {
+    return this.studentsService.updateSubjectScore(id, subjectName, newScore.score);
+  }
+
+  @Delete(':id/subjects/:subjectName')
+  removeSubject(@Param('id') id: string, @Param('subjectName') subjectName: string) {
+    return this.studentsService.removeSubject(id, subjectName);
+  }
 }
